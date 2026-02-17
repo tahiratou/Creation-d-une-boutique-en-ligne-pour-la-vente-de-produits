@@ -1,0 +1,72 @@
+﻿@model BoutiqueEnLigne.Models.User
+
+@{
+    ViewData["Title"] = "Mon profil - DevStore";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-person-circle" style="font-size: 5rem; color: var(--jumia-orange);"></i>
+                    </div>
+                    <h5 class="fw-bold">@Model.Prenom @Model.Nom</h5>
+                    <p class="text-muted">@Model.Email</p>
+                    <span class="badge" style="background-color: var(--jumia-orange);">
+                        @Model.Role
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card mb-4">
+                <div class="card-header" style="background-color: var(--jumia-orange); color: white;">
+                    <h5 class="mb-0"><i class="bi bi-person-badge me-2"></i>Informations du compte</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Prénom :</div>
+                        <div class="col-md-8">@Model.Prenom</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Nom :</div>
+                        <div class="col-md-8">@Model.Nom</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Email :</div>
+                        <div class="col-md-8">@Model.Email</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Rôle :</div>
+                        <div class="col-md-8">@Model.Role</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 fw-bold">Membre depuis :</div>
+                        <div class="col-md-8">@Model.DateInscription.ToString("dd/MM/yyyy")</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background-color: var(--jumia-orange); color: white;">
+                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Mes commandes</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Commandes != null && Model.Commandes.Any())
+                    {
+                        <p>Vous avez @Model.Commandes.Count commande(s)</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">
+                            <i class="bi bi-inbox me-2"></i>Vous n'avez pas encore passé de commande
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

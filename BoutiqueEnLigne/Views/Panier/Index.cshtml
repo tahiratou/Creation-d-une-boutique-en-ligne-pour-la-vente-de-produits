@@ -1,0 +1,212 @@
+﻿@model BoutiqueEnLigne.Models.Panier
+@using BoutiqueEnLigne.Services
+
+@{
+    ViewData["Title"] = "Mon panier - DevStore";
+    var total = Model.Items.Sum(i => (i.Produit?.Prix ?? 0) * i.Quantite);
+}
+
+
+<div class="container py-4">
+    <h1 class="fw-bold mb-4">
+        <i class="bi bi-cart3 me-2" style="color: var(--jumia-orange);"></i>Mon panier
+    </h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model.Items == null || !Model.Items.Any())
+    {
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="bi bi-cart-x" style="font-size: 5rem; color: var(--jumia-gray);"></i>
+            </div>
+            <h3 class="mb-3">Votre panier est vide</h3>
+            <p class="text-muted mb-4">Découvrez nos produits et commencez vos achats !</p>
+            <a asp-controller="Produits" asp-action="Index" class="btn btn-jumia-orange">
+                <i class="bi bi-grid me-2"></i>VOIR LE CATALOGUE
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <!-- Liste des produits -->
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header" style="background-color: var(--jumia-orange); color: white;">
+                        <h5 class="mb-0">Articles dans votre panier (@Model.Items.Count)</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="border-bottom p-3">
+                                <div class="row align-items-center">
+                                    <!-- Image -->
+                                    <div class="col-md-2">
+                                        <img src="@item.Produit.ImageUrl" alt="@item.Produit.Titre"
+                                             class="img-fluid" style="max-height: 100px; object-fit: contain;">
+                                    </div>
+
+                                    <!-- Détails -->
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1">@item.Produit.Titre</h6>
+                                        <small class="text-muted">@item.Produit.Categorie</small>
+                                        <br>
+                                        <small class="text-muted">
+                                            Vendu par : @item.Produit.Vendeur?.Prenom @item.Produit.Vendeur?.Nom
+                                        </small>
+                                    </div>
+
+                                    <!-- Prix unitaire -->
+                                    <div class="col-md-2">
+                                        <p class="mb-0 fw-bold">@TranslationService.FormatPrice(item.Produit.Prix)</p>
+                                    </div>
+
+                                    <!-- Quantité -->
+                                    <div class="col-md-2">
+                                        <div class="input-group input-group-sm">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    onclick="modifierQuantite(@item.Id, @(item.Quantite - 1))">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                            <input type="text" class="form-control text-center"
+                                                   value="@item.Quantite" readonly id="qty-@item.Id">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    onclick="modifierQuantite(@item.Id, @(item.Quantite + 1))">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            Stock : @item.Produit.Stock
+                                        </small>
+                                    </div>
+
+                                    <!-- Sous-total et suppression -->
+                                    <div class="col-md-2 text-end">
+                                        <p class="mb-2 fw-bold text-primary">
+                                            @TranslationService.FormatPrice(item.Produit.Prix * item.Quantite)
+                                        </p>
+                                        <form asp-action="SupprimerItem" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="itemId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('Supprimer cet article ?')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Bouton vider le panier -->
+                <form asp-action="Vider" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-danger"
+                            onclick="return confirm('Vider tout le panier ?')">
+                        <i class="bi bi-trash me-2"></i>Vider le panier
+                    </button>
+                </form>
+            </div>
+
+            <!-- Résumé de la commande -->
+            <div class="col-lg-4">
+                <div class="card sticky-top" style="top: 20px;">
+                    <div class="card-header" style="background-color: var(--jumia-light-gray);">
+                        <h5 class="mb-0">Résumé de la commande</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Sous-total (@Model.Items.Count article(s))</span>
+                            <span class="fw-bold">@TranslationService.FormatPrice(total)</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Frais de livraison</span>
+                            <span class="text-success fw-bold">GRATUIT</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="fw-bold fs-5">Total</span>
+                            <span class="fw-bold fs-4" style="color: var(--jumia-orange);" id="total-price">
+                                @TranslationService.FormatPrice(total)
+                            </span>
+                        </div>
+
+                        <button class="btn btn-jumia-orange w-100 py-3 mb-2" disabled>
+                            <i class="bi bi-credit-card me-2"></i>PASSER LA COMMANDE
+                        </button>
+                        <small class="text-muted d-block text-center">
+                            (Paiement bientôt disponible)
+                        </small>
+
+                        <a asp-controller="Produits" asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">
+                            <i class="bi bi-arrow-left me-2"></i>Continuer mes achats
+                        </a>
+                    </div>
+
+                    <!-- Avantages -->
+                    <div class="card-footer bg-light">
+                        <small class="d-block mb-2">
+                            <i class="bi bi-shield-check text-success me-2"></i>Paiement 100% sécurisé
+                        </small>
+                        <small class="d-block mb-2">
+                            <i class="bi bi-truck text-primary me-2"></i>Livraison rapide
+                        </small>
+                        <small class="d-block">
+                            <i class="bi bi-arrow-repeat text-info me-2"></i>Retours faciles
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function modifierQuantite(itemId, nouvelleQuantite) {
+            if (nouvelleQuantite < 1) {
+                if (!confirm('Voulez-vous supprimer cet article du panier ?')) {
+                    return;
+                }
+            }
+
+            fetch('@Url.Action("ModifierQuantite", "Panier")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: `itemId=${itemId}&quantite=${nouvelleQuantite}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue');
+            });
+        }
+    </script>
+}

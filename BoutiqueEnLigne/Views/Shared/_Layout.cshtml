@@ -32,15 +32,44 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
+                        @if (Context.Session.GetInt32("UserId") != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> @Context.Session.GetString("UserNom")
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                            <i class="bi bi-person me-2"></i>Mon profil
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                    <i class="bi bi-person"></i> Connexion
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">
+                                    <i class="bi bi-person-plus"></i> Inscription
+                                </a>
+                            </li>
+                        }
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-person"></i> Connexion
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" href="#">
+                            <a class="nav-link position-relative" asp-controller="Panier" asp-action="Index">
                                 <i class="bi bi-cart3"></i> Panier
-                                <span class="cart-badge">0</span>
+                                @await Component.InvokeAsync("PanierCount")
                             </a>
                         </li>
                     </ul>

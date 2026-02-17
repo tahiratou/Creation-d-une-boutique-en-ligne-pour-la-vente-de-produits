@@ -1,0 +1,96 @@
+﻿@model BoutiqueEnLigne.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Inscription - DevStore";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 fw-bold" style="color: var(--jumia-orange);">
+                        <i class="bi bi-person-plus me-2"></i>Créer un compte
+                    </h2>
+
+                    <form asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prenom" class="form-label fw-semibold"></label>
+                                <input asp-for="Prenom" class="form-control" />
+                                <span asp-validation-for="Prenom" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nom" class="form-label fw-semibold"></label>
+                                <input asp-for="Nom" class="form-control" />
+                                <span asp-validation-for="Nom" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MotDePasse" class="form-label fw-semibold"></label>
+                            <input asp-for="MotDePasse" class="form-control" />
+                            <span asp-validation-for="MotDePasse" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmMotDePasse" class="form-label fw-semibold"></label>
+                            <input asp-for="ConfirmMotDePasse" class="form-control" />
+                            <span asp-validation-for="ConfirmMotDePasse" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Type de compte</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="Role" value="Client" checked id="roleClient">
+                                        <label class="form-check-label" for="roleClient">
+                                            <i class="bi bi-person me-1"></i>Client
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="Role" value="Vendeur" id="roleVendeur">
+                                        <label class="form-check-label" for="roleVendeur">
+                                            <i class="bi bi-shop me-1"></i>Vendeur
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-jumia-orange w-100 py-3 mb-3">
+                            <i class="bi bi-check-circle me-2"></i>CRÉER MON COMPTE
+                        </button>
+
+                        <div class="text-center">
+                            <p class="mb-0">
+                                Déjà inscrit ?
+                                <a asp-action="Login" style="color: var(--jumia-orange); text-decoration: none; font-weight: 600;">
+                                    Se connecter
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

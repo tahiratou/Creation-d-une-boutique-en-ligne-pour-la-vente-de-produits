@@ -1,0 +1,79 @@
+﻿@model BoutiqueEnLigne.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Connexion - DevStore";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 fw-bold" style="color: var(--jumia-orange);">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Connexion
+                    </h2>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" aria-label="Close"></button>
+                        </div>
+                    }
+
+
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Email" class="form-control form-control-lg" placeholder="exemple@email.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MotDePasse" class="form-label fw-semibold"></label>
+                            <input asp-for="MotDePasse" class="form-control form-control-lg" placeholder="••••••••" />
+                            <span asp-validation-for="MotDePasse" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" asp-for="SeSouvenirDeMoi" id="remember">
+                                <label class="form-check-label" for="remember">
+                                    Se souvenir de moi
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-jumia-orange w-100 py-3 mb-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>SE CONNECTER
+                        </button>
+
+                        <div class="text-center">
+                            <p class="mb-0">
+                                Pas encore de compte ?
+                                <a asp-action="Register" style="color: var(--jumia-orange); text-decoration: none; font-weight: 600;">
+                                    S'inscrire
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center text-muted small">
+                        <p class="mb-2"><strong>Comptes de test :</strong></p>
+                        <p class="mb-1">Client : client@test.com / Password123!</p>
+                        <p class="mb-0">Vendeur : vendeur@test.com / Password123!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
