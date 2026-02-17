@@ -1,0 +1,115 @@
+﻿@model BoutiqueEnLigne.Models.Produit
+@using BoutiqueEnLigne.Services
+
+@{
+    ViewData["Title"] = Model.Titre;
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Accueil</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-controller="Produits" asp-action="Index">Produits</a>
+            </li>
+            <li class="breadcrumb-item active">@Model.Titre</li>
+        </ol>
+    </nav>
+
+    <div class="jumia-details-container">
+        <div class="row g-4">
+            <!-- Image -->
+            <div class="col-lg-5">
+                <div class="jumia-details-image-container">
+                    <img src="@Model.ImageUrl" class="jumia-details-image" alt="@Model.Titre">
+                </div>
+            </div>
+
+            <!-- Informations -->
+            <div class="col-lg-7">
+                <h1 class="fw-bold mb-2">@Model.Titre</h1>
+
+                <div class="jumia-rating mb-3">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-half"></i>
+                    <span class="jumia-rating-count">(243 avis vérifiés)</span>
+                </div>
+
+                <span class="jumia-product-category d-inline-block mb-3">
+                    <i class="bi bi-tag me-1"></i>@Model.Categorie
+                </span>
+
+                <div class="border-top border-bottom py-3 mb-3">
+                    <div class="jumia-details-price mb-2">
+                        @TranslationService.FormatPrice(Model.Prix)
+                    </div>
+
+                    @if (Model.Stock > 0)
+                    {
+                        <span class="jumia-stock-badge">
+                            <i class="bi bi-check-circle me-1"></i>En stock (@Model.Stock unités)
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="jumia-out-stock-badge">
+                            <i class="bi bi-x-circle me-1"></i>Rupture de stock
+                        </span>
+                    }
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-3">Description</h5>
+                    <p class="text-muted">@Model.Description</p>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-person-badge me-2"></i>Vendeur
+                    </h5>
+                    <p class="mb-0"><strong>@Model.Vendeur?.Prenom @Model.Vendeur?.Nom</strong></p>
+                    <small class="text-muted">Vendeur vérifié ✓</small>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-grid gap-2 mb-4">
+                    <button class="btn btn-jumia-orange btn-lg" style="padding: 15px;" disabled>
+                        <i class="bi bi-cart-plus me-2"></i>AJOUTER AU PANIER (Prochainement)
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-arrow-left me-2"></i>CONTINUER MES ACHATS
+                    </a>
+                </div>
+
+                <!-- Garanties -->
+                <div class="border rounded p-3" style="background-color: #fff5ed;">
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-shield-check me-2" style="color: var(--jumia-orange);"></i>
+                        GARANTIES & SERVICES
+                    </h6>
+                    <div class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <span>Livraison rapide partout au pays</span>
+                    </div>
+                    <div class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <span>Paiement 100% sécurisé</span>
+                    </div>
+                    <div class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <span>Retours gratuits sous 14 jours</span>
+                    </div>
+                    <div>
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <span>Garantie fabricant</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

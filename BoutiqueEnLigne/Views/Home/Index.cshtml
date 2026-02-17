@@ -1,8 +1,101 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<BoutiqueEnLigne.Models.Produit>
+@using BoutiqueEnLigne.Services
+
+@{
+    ViewData["Title"] = "Accueil - DevStore";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Barre de recherche -->
+<div class="container mt-4">
+    <div class="jumia-search-container">
+        <form asp-controller="Produits" asp-action="Index" method="get">
+            <div class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" name="recherche" class="jumia-search-input"
+                           placeholder="Je recherche un produit...">
+                </div>
+                <div class="col-md-2">
+                    <button class="jumia-search-btn w-100" type="submit">
+                        <i class="bi bi-search me-2"></i>RECHERCHER
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Produits -->
+<div class="container mb-4">
+    <div class="jumia-section-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="jumia-section-title mb-0">
+                Nos produits
+            </h2>
+            <a asp-controller="Produits" asp-action="Index" class="btn btn-jumia-orange">
+                VOIR TOUT <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+            @foreach (var produit in Model)
+            {
+                <div class="col">
+                    <div class="jumia-product-card">
+                        <div class="jumia-product-image-container">
+                            <img src="@produit.ImageUrl" class="jumia-product-image" alt="@produit.Titre">
+                        </div>
+                        <div class="jumia-product-body">
+                            <span class="jumia-product-category">@produit.Categorie</span>
+                            <h5 class="jumia-product-title">@produit.Titre</h5>
+                            <div class="jumia-product-price">
+                                @TranslationService.FormatPrice(produit.Prix)
+                            </div>
+                            <div class="jumia-rating mb-2">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                                <span class="jumia-rating-count">(156)</span>
+                            </div>
+                            <a asp-controller="Produits" asp-action="Details" asp-route-id="@produit.Id"
+                               class="jumia-add-to-cart text-decoration-none d-block text-center">
+                                VOIR DÉTAILS
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Avantages -->
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="text-center p-4 bg-white rounded">
+                <i class="bi bi-truck fs-1 mb-3" style="color: var(--jumia-orange);"></i>
+                <h5 class="fw-bold">Livraison rapide</h5>
+                <p class="text-muted mb-0">Livraison en 24h-48h</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center p-4 bg-white rounded">
+                <i class="bi bi-shield-check fs-1 mb-3" style="color: var(--jumia-orange);"></i>
+                <h5 class="fw-bold">Paiement sécurisé</h5>
+                <p class="text-muted mb-0">100% sécurisé</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center p-4 bg-white rounded">
+                <i class="bi bi-arrow-repeat fs-1 mb-3" style="color: var(--jumia-orange);"></i>
+                <h5 class="fw-bold">Retours faciles</h5>
+                <p class="text-muted mb-0">Retours sous 14 jours</p>
+            </div>
+        </div>
+    </div>
 </div>

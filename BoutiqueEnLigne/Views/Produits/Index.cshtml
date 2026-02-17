@@ -1,0 +1,120 @@
+﻿@model IEnumerable<BoutiqueEnLigne.Models.Produit>
+@using BoutiqueEnLigne.Services
+
+@{
+    ViewData["Title"] = "Catalogue - DevStore";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <!-- Sidebar Catégories -->
+        <div class="col-lg-3 mb-4">
+            <div class="jumia-filter-card">
+                <h5 class="jumia-filter-title">
+                    <i class="bi bi-funnel me-2"></i>FILTRES
+                </h5>
+                <form method="get" asp-action="Index">
+                    <div class="mb-3">
+                        <label class="form-label">Rechercher</label>
+                        <input type="text" name="recherche" class="form-control"
+                               value="@ViewBag.Recherche" placeholder="Rechercher...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie</label>
+                        <select name="categorie" class="form-select">
+                            <option value="">Toutes les catégories</option>
+                            @foreach (var cat in ViewBag.Categories as List<string>)
+                            {
+                                <option value="@cat" selected="@(cat == ViewBag.CategorieSelectionnee)">
+                                    @cat
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-jumia-orange w-100 mb-2">
+                        <i class="bi bi-check-circle me-2"></i>APPLIQUER
+                    </button>
+                    @if (!string.IsNullOrEmpty(ViewBag.CategorieSelectionnee) || !string.IsNullOrEmpty(ViewBag.Recherche))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-x-circle me-2"></i>RÉINITIALISER
+                        </a>
+                    }
+                </form>
+            </div>
+
+            <!-- Liste des catégories -->
+            <div class="jumia-categories">
+                <a asp-action="Index" class="jumia-category-item @(string.IsNullOrEmpty(ViewBag.CategorieSelectionnee) ? "active" : "")">
+                    <i class="bi bi-grid me-2"></i>Tous les produits
+                </a>
+                @foreach (var cat in ViewBag.Categories as List<string>)
+                {
+                    <a asp-action="Index" asp-route-categorie="@cat"
+                       class="jumia-category-item @(cat == ViewBag.CategorieSelectionnee ? "active" : "")">
+                        <i class="bi bi-tag me-2"></i>@cat
+                    </a>
+                }
+            </div>
+        </div>
+
+        <!-- Liste Produits -->
+        <div class="col-lg-9">
+            <div class="jumia-section-header mb-3">
+                <h2 class="jumia-section-title">
+                    @if (!string.IsNullOrEmpty(ViewBag.CategorieSelectionnee))
+                    {
+                        <text>@ViewBag.CategorieSelectionnee</text>
+                    }
+                    else
+                    {
+                        <text>Tous les produits</text>
+                    }
+                    <span class="text-muted fs-6 ms-2">(@(Model?.Count() ?? 0) produits)</span>
+                </h2>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
+                    @foreach (var produit in Model)
+                    {
+                        <div class="col">
+                            <div class="jumia-product-card">
+                                <div class="jumia-product-image-container">
+                                    <img src="@produit.ImageUrl" class="jumia-product-image" alt="@produit.Titre">
+                                </div>
+                                <div class="jumia-product-body">
+                                    <span class="jumia-product-category">@produit.Categorie</span>
+                                    <h5 class="jumia-product-title">@produit.Titre</h5>
+                                    <div class="jumia-product-price">
+                                        @TranslationService.FormatPrice(produit.Prix)
+                                    </div>
+                                    <div class="jumia-rating mb-2">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                        <span class="jumia-rating-count">(156)</span>
+                                    </div>
+                                    <a asp-action="Details" asp-route-id="@produit.Id"
+                                       class="jumia-add-to-cart text-decoration-none d-block text-center">
+                                        VOIR DÉTAILS
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Aucun produit ne correspond à vos critères.
+                </div>
+            }
+        </div>
+    </div>
+</div>
