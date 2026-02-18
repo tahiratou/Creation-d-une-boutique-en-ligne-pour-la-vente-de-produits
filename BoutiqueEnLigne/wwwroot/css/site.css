@@ -154,12 +154,15 @@ body {
     margin-bottom: 25px;
 }
 
+
+/* Barre de recherche */
 .jumia-search-input {
     border: 2px solid #ddd;
     border-radius: 4px;
     padding: 15px 20px;
     font-size: 1rem;
     width: 100%;
+    min-height: 55px; /* Hauteur minimale */
 }
 
     .jumia-search-input:focus {
@@ -176,11 +179,16 @@ body {
     border-radius: 4px;
     font-weight: 600;
     transition: all 0.3s;
+    min-height: 55px; /* Même hauteur que l'input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
     .jumia-search-btn:hover {
         background-color: var(--jumia-dark-orange);
     }
+
 
 /* ========================================
    CARDS PRODUITS STYLE JUMIA

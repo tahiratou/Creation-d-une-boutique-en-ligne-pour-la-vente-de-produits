@@ -78,23 +78,27 @@
 
                 <!-- Actions -->
                 <div class="d-grid gap-3">
-                    <form asp-controller="Panier" asp-action="AjouterProduit" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="produitId" value="@Model.Id" />
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Quantité</span>
-                            <input type="number" name="quantite" class="form-control" value="1" min="1" max="@Model.Stock">
-                        </div>
-                        <button type="submit" class="btn btn-jumia-orange btn-lg w-100"
-                                @(Model.Stock == 0 ? "disabled" : "")>
-                            <i class="bi bi-cart-plus me-2"></i>
-                            @(Model.Stock > 0 ? "AJOUTER AU PANIER" : "RUPTURE DE STOCK")
-                        </button>
-                    </form>
+                    @if (Context.Session.GetString("UserRole") == "Client")
+                    {
+                        <form asp-controller="Panier" asp-action="AjouterProduit" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="produitId" value="@Model.Id" />
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Quantité</span>
+                                <input type="number" name="quantite" class="form-control" value="1" min="1" max="@Model.Stock">
+                            </div>
+                            <button type="submit" class="btn btn-jumia-orange btn-lg w-100" 
+                                    @(Model.Stock == 0 ? "disabled" : "")>
+                                <i class="bi bi-cart-plus me-2"></i>
+                                @(Model.Stock > 0 ? "AJOUTER AU PANIER" : "RUPTURE DE STOCK")
+                            </button>
+                        </form>
+                    }
                     <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
                         <i class="bi bi-arrow-left me-2"></i>Retour aux produits
                     </a>
                 </div>
+              
 
                 <!-- Garanties -->
                 <div class="border rounded p-3" style="background-color: #fff5ed;">

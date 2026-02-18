@@ -57,15 +57,14 @@ namespace BoutiqueEnLigne.Services
             {
                 var produit = new Produit
                 {
-                    Titre = ProductTranslationService.TranslateText(fakeProduct.Title), 
-                    Description = ProductTranslationService.TranslateText(fakeProduct.Description), 
+                    Titre = fakeProduct.Title, 
+                    Description = fakeProduct.Description, 
                     Prix = fakeProduct.Price,
-                    Categorie = TranslationService.TranslateCategory(fakeProduct.Category),
+                    Categorie = fakeProduct.Category,
                     ImageUrl = fakeProduct.Image,
                     Stock = 10,
                     VendeurId = vendeur1.Id
                 };
-
                 _context.Produits.Add(produit);
             }
 

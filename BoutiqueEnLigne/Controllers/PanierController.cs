@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using BoutiqueEnLigne.Attributes;
 using BoutiqueEnLigne.Data;
 using BoutiqueEnLigne.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoutiqueEnLigne.Controllers
 {
+    [RoleAuthorize("Client")] 
     public class PanierController : Controller
     {
         private readonly ApplicationDbContext _context;

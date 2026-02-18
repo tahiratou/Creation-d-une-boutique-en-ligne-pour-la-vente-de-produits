@@ -1,0 +1,59 @@
+﻿@model BoutiqueEnLigne.Models.User
+
+@{
+    ViewData["Title"] = "Tableau de bord vendeur";
+}
+
+<div class="container py-4">
+    <h1 class="fw-bold mb-4">
+        <i class="bi bi-speedometer2 me-2" style="color: var(--jumia-orange);"></i>
+        Tableau de bord vendeur
+    </h1>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center p-4" style="border-left: 4px solid var(--jumia-orange);">
+                <i class="bi bi-cash-stack fs-1 mb-3" style="color: var(--jumia-orange);"></i>
+                <h3 class="fw-bold">@ViewBag.TotalVentes.ToString("N2") $</h3>
+                <p class="text-muted mb-0">Total des ventes</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center p-4" style="border-left: 4px solid #4caf50;">
+                <i class="bi bi-box-seam fs-1 mb-3 text-success"></i>
+                <h3 class="fw-bold">@ViewBag.NombreProduits</h3>
+                <p class="text-muted mb-0">Produits en ligne</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center p-4" style="border-left: 4px solid #2196f3;">
+                <i class="bi bi-cart-check fs-1 mb-3 text-primary"></i>
+                <h3 class="fw-bold">@ViewBag.VentesRecentes</h3>
+                <p class="text-muted mb-0">Ventes totales</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <a asp-action="AjouterProduit" class="btn btn-jumia-orange w-100 py-4">
+                <i class="bi bi-plus-circle me-2"></i>AJOUTER UN PRODUIT
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-action="MesProduits" class="btn btn-outline-secondary w-100 py-4">
+                <i class="bi bi-grid me-2"></i>GÉRER MES PRODUITS
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <a asp-action="Ventes" class="btn btn-outline-primary w-100 py-3">
+                <i class="bi bi-receipt me-2"></i>VOIR MES VENTES
+            </a>
+        </div>
+    </div>
+</div>

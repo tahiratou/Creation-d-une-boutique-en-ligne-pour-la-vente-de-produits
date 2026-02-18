@@ -50,14 +50,17 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header" style="background-color: var(--jumia-orange); color: white;">
-                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Mes commandes</h5>
+                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Mes commandes et factures</h5>
                 </div>
                 <div class="card-body">
                     @if (Model.Commandes != null && Model.Commandes.Any())
                     {
-                        <p>Vous avez @Model.Commandes.Count commande(s)</p>
+                        <p class="mb-3">Vous avez <strong>@Model.Commandes.Count</strong> commande(s)</p>
+                        <a asp-controller="Facture" asp-action="MesFactures" class="btn btn-jumia-orange">
+                            <i class="bi bi-file-earmark-pdf me-2"></i>VOIR MES FACTURES
+                        </a>
                     }
                     else
                     {

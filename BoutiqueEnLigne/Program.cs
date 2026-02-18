@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using BoutiqueEnLigne.Data;
-using BoutiqueEnLigne.Services;  
+using BoutiqueEnLigne.Services;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // Configuration de la base de données
@@ -22,17 +22,19 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Enregistrer HttpClient pour FakeStoreService
+// Enregistrer les services
 builder.Services.AddHttpClient<FakeStoreService>();
-
-// Enregistrer DbInitializerService
 builder.Services.AddScoped<DbInitializerService>();
+// Enregistrer FactureService
+builder.Services.AddScoped<FactureService>();
+// Configuration Stripe
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+
 
 var app = builder.Build();
 
-// ========================================
-// Initialiser la base de données au démarrage
-// ========================================
+// Initialiser la base de données
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -44,11 +46,10 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Une erreur s'est produite lors de l'initialisation de la base de données.");
+        logger.LogError(ex, "Erreur lors de l'initialisation de la base de données.");
     }
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -57,11 +58,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseSession();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

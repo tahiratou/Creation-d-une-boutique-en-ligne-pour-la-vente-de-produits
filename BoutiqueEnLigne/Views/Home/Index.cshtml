@@ -9,13 +9,13 @@
 <div class="container mt-4">
     <div class="jumia-search-container">
         <form asp-controller="Produits" asp-action="Index" method="get">
-            <div class="row g-2">
+            <div class="row g-2 align-items-stretch">
                 <div class="col-md-10">
-                    <input type="text" name="recherche" class="jumia-search-input"
+                    <input type="text" name="recherche" class="jumia-search-input h-100"
                            placeholder="Je recherche un produit...">
                 </div>
                 <div class="col-md-2">
-                    <button class="jumia-search-btn w-100" type="submit">
+                    <button class="jumia-search-btn w-100 h-100" type="submit">
                         <i class="bi bi-search me-2"></i>RECHERCHER
                     </button>
                 </div>
@@ -65,6 +65,7 @@
                                class="jumia-add-to-cart text-decoration-none d-block text-center">
                                 VOIR DÉTAILS
                             </a>
+
                         </div>
                     </div>
                 </div>

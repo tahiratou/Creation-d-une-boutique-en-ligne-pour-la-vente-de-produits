@@ -34,16 +34,39 @@
                     <ul class="navbar-nav">
                         @if (Context.Session.GetInt32("UserId") != null)
                         {
+                            var userRole = Context.Session.GetString("UserRole");
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     <i class="bi bi-person-circle"></i> @Context.Session.GetString("UserNom")
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                            <i class="bi bi-person me-2"></i>Mon profil
-                                        </a>
-                                    </li>
+                                    @if (userRole == "Client")
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                                <i class="bi bi-person me-2"></i>Mon profil
+                                            </a>
+                                        </li>
+                                    }
+                                    else if (userRole == "Vendeur")
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Vendeur" asp-action="Dashboard">
+                                                <i class="bi bi-speedometer2 me-2"></i>Tableau de bord
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Vendeur" asp-action="MesProduits">
+                                                <i class="bi bi-grid me-2"></i>Mes produits
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Vendeur" asp-action="Ventes">
+                                                <i class="bi bi-receipt me-2"></i>Mes ventes
+                                            </a>
+                                        </li>
+                                    }
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
@@ -52,6 +75,16 @@
                                     </li>
                                 </ul>
                             </li>
+
+                            @if (userRole == "Client")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link position-relative" asp-controller="Panier" asp-action="Index">
+                                        <i class="bi bi-cart3"></i> Panier
+                                        @await Component.InvokeAsync("PanierCount")
+                                    </a>
+                                </li>
+                            }
                         }
                         else
                         {
@@ -66,12 +99,6 @@
                                 </a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" asp-controller="Panier" asp-action="Index">
-                                <i class="bi bi-cart3"></i> Panier
-                                @await Component.InvokeAsync("PanierCount")
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
